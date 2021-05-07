@@ -1,0 +1,171 @@
+<% include  partials/header %>
+
+<style media="screen">
+
+	table.dataTable > thead > tr > th,
+	table.dataTable > tbody > tr > th,
+	table.dataTable > tfoot > tr > th,
+	table.dataTable > thead > tr > td,
+	table.dataTable > tbody > tr > td,
+	table.dataTable > tfoot > tr > td {
+		text-align:  center;
+	}
+
+
+</style>
+<div hidden class=" col-md-12 container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header card-header-tabs" data-background-color="green">
+					<div class="nav-tabs-navigation">
+						<div class="nav-tabs-wrapper">
+							<span class="nav-tabs-title"><h1 class="card-title">All Packages</h1></span>
+							<ul class="nav nav-tabs" data-tabs="tabs">
+								<li  style="float:right;" >
+									<a class="btn btn-success btn-round" href="/isp">
+										<i class="material-icons">exit_to_app</i>BACK&nbsp;
+										<div class="ripple-container"></div></a>
+									</a>
+								</li>
+								<li  style="float:right;" >
+									<a class="btn btn-success btn-round" href="/isp/add_package_frm/?id_isp=<%=id_isp%>">
+										<i class="material-icons">add</i>ADD&nbsp;
+										<div class="ripple-container"></div></a>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-content">
+					<div class="toolbar"><!--        Here you can write extra buttons/actions for the toolbar              --></div>
+					<div class="material-datatables table-responsive">
+										<table id="search_grid" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+											<thead>
+												<tr>
+													<th>Id Isp</th>
+													<th>Name</th>
+													<th>Speed</th>
+													<th>Price ( Taka )</th>
+													<th>Type</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<% items.forEach((item) => { %>
+													<tr>
+														<td><%= item.id_isp %></td>
+														<td><%= item.package_name %></td>
+														<td><%= item.package_speed %></td>
+														<td><%= item.package_price %></td>
+														<td><%= item.package_type %></td>
+														<td><%= item.id_package %></td>
+													</tr>
+													<% }); %>
+											</tbody>
+												<tr>
+								          <th>Name</th>
+													<th>Speed</th>
+													<th>Price ( Taka )</th>
+													<th>Type</th>
+													<th>Action</th>
+												</tr>
+											</tfoot>
+										</table>
+							</div>
+					</div>
+			 </div>
+		 </div>
+	 </div>
+</div>
+
+<% include  partials/footer %>
+
+<script type="text/javascript">
+
+$("#fakeLoader").fakeLoader({
+spinner:"spinner4",//Options: 'spinner1', 'spinner2', 'spinner3', 'spinner4', 'spinner5', 'spinner6', 'spinner7'
+bgColor:"#EEEEEE"
+});
+
+var package_id = "";
+var oTable = "";
+
+$(document).ready(function() {
+	$("#fakeLoader").hide();
+	$(".container").show();
+
+	 oTable = $('#search_grid').DataTable({
+
+		 // data:[],
+		 columns: [
+			 { "data" : "id_isp" },
+			 { "data" : "package_name" },
+			 { "data" : "package_speed" },
+			 { "data" : "package_price" },
+			 { "data" : "package_type" },
+			 { "data" : "id_package" },
+		 ],
+		 rowCallback: function (row, data) {
+			 $('td:last', row).html('');
+			 var tmp = $('<a id="edit_btn" class="btn btn-simple btn-warning btn-icon edit"><i class="material-icons">create</i></a>').attr('href','/isp/edit_package_frm'+'/'+data.id_package);
+			 $('td:last', row).append(tmp);
+			 var tmp = $('<a id="edit_btn" class="btn btn-simple btn-danger btn-icon delete_item"><i class="material-icons">close</i></a>').attr({'id_isp': data.id_isp,'id_package': data.id_package});
+			 $('td:last', row).append(tmp);
+		 },
+		 columnDefs:[
+			 {
+				 "targets": [ 0 ],
+				 "visible": false,
+				 "searchable": false
+			 }
+		 ],
+		 drawCallback: function( settings ) {
+		 },
+		 filter: true,
+		 info: true,
+		 ordering: true,
+		 processing: true,
+		 retrieve: true
+	 });
+
+
+	 	 $("#search_grid").on('click', '.delete_item', function(){
+	 		 var id_package = $(this).attr('id_package');
+			 var id_isp = $(this).attr('id_isp');
+
+	 		 swal({
+	 			 type:'warning',
+	 			 title: 'Are you sure to Delete Package?',
+	 			 text: 'You will not be able to recover the data ',
+	 			 showCancelButton: true,
+	 			 confirmButtonColor: '#049F0C',
+	 			 cancelButtonColor:'#ff0000',
+	 			 confirmButtonText: 'Yes, delete it!',
+	 			 cancelButtonText: 'No, keep it'
+	 		 }).then(function (res) {
+	 			 $.ajax({
+	 				 type:"POST",
+	 				 contentType: "application/x-www-form-urlencoded",
+	 				 dataType:"json",
+	 				 data:{'id_package' : id_package , 'id_isp' : id_isp},
+	 				 url: '/isp/delete_package_now',
+
+	 				 success:function(response) {
+	 					 console.log("Response data " + response.data);
+	 					 if(response.status === 'success') {
+	 						 refresh_datatable(response.data, 'success', response.msg);
+	 						 showNotification(2,response.msg);
+	 					 } else {
+	 						 showNotification(4,response.msg);
+	 					 }
+	 				 }
+	 			 });
+	 		 });
+	 		 console.log(' id_package  = ' + id_package );
+	 	 });
+
+});
+</script>

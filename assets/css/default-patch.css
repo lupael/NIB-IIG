@@ -1,0 +1,23 @@
+.page-header {
+  height: 30px  !important;
+}
+h1 {
+  font-size: 20px !important;
+}
+
+.nav-container > .nav > li > a {
+  padding: 2px !important;
+}
+
+.sidebar .user, .off-canvas-sidebar .user {
+  padding-bottom: 8px !important;
+  margin: 5px auto 0 !important;
+}
+
+.nav > li > a {
+  padding: 5px 15px !important;
+}
+
+.wrapper {
+    overflow-y: hidden !important;
+}

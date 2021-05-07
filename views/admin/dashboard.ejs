@@ -1,0 +1,145 @@
+  <% include  partials/header %>
+
+  <style media="screen">
+
+  </style>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div style ="background-color: #EEEEEE !important;"class="card">
+        <div class="card-header card-header-tabs" data-background-color="green">
+          <div class="nav-tabs-navigation">
+            <div class="nav-tabs-wrapper">
+              <span class="nav-tabs-title"></span>
+              <ul class="nav nav-tabs" data-tabs="tabs">
+                <li class="active">
+                  <a href="#movie" data-toggle="tab">
+                    <i class="material-icons">dashboard</i> ISP
+                      <div class="ripple-container"></div>
+                  </a>
+                </li>
+                <li class="">
+                  <a id ="billingTab" href="#customer" data-toggle="tab" >
+                    <i class="material-icons">dashboard</i> Network
+                      <div class="ripple-container"></div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card-content">
+            <div class="tab-content">
+              <div class="tab-pane active" id="movie">
+                <div class="row">
+
+  												<div class="col-lg-3 col-md-6 col-sm-6">
+  													<div class="card card-stats">
+  														<div class="card-header card-header-icon" data-background-color="purple">
+  															<i class="material-icons">router</i>
+  														</div>
+  														<div class="card-content">
+  															<p class="category">Router</p>
+  															<h3 class="card-title"><?php echo $router ?></h3>
+  														</div>
+  														<div class="card-footer">
+  															<div class="stats">
+  																<i class="material-icons text-danger">visibility</i>
+  															<a href="<?php echo base_url();?>router/routers">View Routers</a>
+  															</div>
+  														</div>
+  													</div>
+  												</div>
+
+
+
+
+  											<div class="col-lg-3 col-md-6 col-sm-6">
+  												<div class="card card-stats">
+  													<div class="card-header card-header-icon" data-background-color="green">
+  														<i class="material-icons">people</i>
+  													</div>
+  													<div class="card-content">
+  														<p class="category">Customer</p>
+  														<h3 class="card-title"></h3>
+  													</div>
+  													<div class="card-footer">
+  														<div class="stats">
+  															<i class="material-icons text-danger">visibility</i>
+  															<a href="<?php echo base_url(); ?>ppp">View Customers</a>
+  														</div>
+  													</div>
+  												</div>
+  											</div>
+
+  											<div class="col-lg-3 col-md-6 col-sm-6">
+  												<div class="card card-stats">
+  													<div class="card-header card-header-icon" data-background-color="blue">
+  														<i class="material-icons">add</i>
+  													</div>
+  													<div class="card-content">
+  														<p class="category">Entries</p>
+  														<h3 class="card-title"></h3>
+  													</div>
+  													<div class="card-footer">
+  														<div class="stats">
+  															<i class="material-icons text-danger">visibility</i>
+  															<a href="<?php echo base_url(); ?>search">View Log</a>
+  														</div>
+  													</div>
+  												</div>
+  											</div>
+
+  											<div class="col-lg-3 col-md-6 col-sm-6">
+  												<div class="card card-stats">
+  													<div class="card-header card-header-icon" data-background-color="red">
+  														<i class="material-icons">error</i>
+  													</div>
+  													<div class="card-content">
+  														<p class="category">Error !</p>
+  														<h3 class="card-title"></h3>
+  													</div>
+  													<div class="card-footer">
+  														<div class="stats">
+  															<i class="material-icons text-danger">visibility</i>
+  															<a href="<?php echo base_url();?>dashboard/view_notifications">View Errors</a>
+  														</div>
+  													</div>
+  												</div>
+  											</div>
+
+
+  										</div>
+              </div>
+              <div class="tab-pane" id="customer">
+              </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <% include  partials/footer %>
+<!-- append('<div class="well"> </div>') -->
+  <!-- Socket IO -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript">
+
+  var socket = io.connect();
+
+  socket.on('users watching movie', function (data) {
+    console.log(data.users_id);
+     $('.users').empty();
+    var i;
+    for (i = 0; i < data.users_id.length; i++) {
+      $('.users').append('<div class="well"><i class="material-icons">person_pin</i>'+data.users_name[i]+' is watching movie.</div>');
+    }
+
+  });
+
+  socket.on('active users', function (data) {
+    $('#active_customer').text(data.count);
+  });
+  </script>

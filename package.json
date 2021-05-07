@@ -1,0 +1,32 @@
+{
+  "name": "IIG",
+  "version": "1.0.0",
+  "description": "ISP handling system for IIG.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mohammad Mahabub Alam",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-mysql-session": "^2.0.0",
+    "express-session": "^1.15.6",
+    "ini": "^1.3.5",
+    "ip": "^1.1.5",
+    "lodash": "^4.17.10",
+    "multer": "^1.3.0",
+    "mysql": "^2.15.0",
+    "nodemailer": "^4.6.8",
+    "path": "^0.12.7",
+    "plyr": "^3.3.22",
+    "plyr-ads": "^1.1.5",
+    "progress-stream": "^2.0.0",
+    "random-number": "0.0.9",
+    "request": "^2.88.0",
+    "socket.io": "^2.1.1"
+  }
+}

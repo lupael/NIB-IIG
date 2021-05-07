@@ -1,0 +1,80 @@
+  <% include  partials/header %>
+
+  <style media="screen">
+
+  </style>
+
+  <div class="row">
+  	<div class="col-sm-6 col-sm-offset-3">
+  		<div class="card">
+        <div class="card-header card-header-tabs" data-background-color="green">
+					<div class="nav-tabs-navigation">
+						<div class="nav-tabs-wrapper">
+							<span class="nav-tabs-title"><h1 class="card-title">Edit Role</h1></span>
+							<ul class="nav nav-tabs" data-tabs="tabs">
+
+							</ul>
+						</div>
+					</div>
+				</div>
+  			<div class="card-content">
+  				<div id="result"></div>
+  				<form method="post"  id="form_admin" enctype="multipart/form-data">
+  					<div class="form-group label-floating">
+  						<label class="control-label">Role Name</label>
+  						<input type="text" class="form-control" id="name" name="name" value = '<%= IndivRole[0].role_name%>'required>
+  					</div>
+
+            <div class="form-group label-floating">
+              <label class="control-label">Description</label>
+              <input type="text" class="form-control" id="desc" name="desc"  value = '<%= IndivRole[0].role_desc%>' >
+            </div>
+
+            <input type="hidden" id="id_role" name="id_role"  value = '<%= IndivRole[0].id_role%>' >
+
+  					<button type="submit" name="submit" class="btn btn-fill btn-success" value="submit">Submit</button>
+  					<a href="/isp/view_isp_user_role/?id_isp=<%= IndivRole[0].id_isp%>" class="btn btn-fill btn-success">Back</a>
+
+  				</form>
+  			</div><!-- end of col-md-6 -->
+  		</div><!-- end of class row  -->
+  	</div>
+  </div>
+
+<% include  partials/footer %>
+
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+
+  	$("#form_admin").validate({
+
+  		submitHandler: function (form) {
+  			var reqData = $("#form_admin").serialize();
+
+  			$.ajax({
+  				type:"POST",
+  				contentType: "application/x-www-form-urlencoded",
+  				dataType:"json",
+  				data: reqData,
+  				url: "/isp/edit_role_now",
+
+  				success:function(response) {
+            // console.log(response);
+            if(response.status === 'success') {
+              showNotification(2, response.msg);
+            } else if(response.status === 'warning') {
+              showNotification(3, response.msg);
+            } else if (response.status === 'failed'){
+              showNotification(4, response.msg);
+            }
+  				},
+  				error: function (result) {
+  					showNotification(3,"Error " + JSON.stringify(result));
+  				}
+  			});
+  		}
+  	});
+  });
+
+  </script>

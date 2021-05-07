@@ -1,0 +1,79 @@
+  <% include  partials/header %>
+
+  <style media="screen">
+
+  </style>
+
+  <div class="row">
+  	<div class="col-sm-6 col-sm-offset-3">
+  		<div class="card">
+        <div class="card-header card-header-tabs" data-background-color="green">
+					<div class="nav-tabs-navigation">
+						<div class="nav-tabs-wrapper">
+							<span class="nav-tabs-title"><h1 class="card-title">Add Payment</h1></span>
+							<ul class="nav nav-tabs" data-tabs="tabs">
+
+							</ul>
+						</div>
+					</div>
+				</div>
+  			<div class="card-content">
+  				<div id="result"></div>
+  				<form method="post"  id="form_admin" enctype="multipart/form-data">
+  					<div class="form-group label-floating">
+  						<label class="control-label">ISP Name</label>
+  						<input type="text" class="form-control" id="name" name="name" value=<%=results[0].isp_name%> readonly />
+  					</div>
+            <div class="form-group label-floating">
+  						<label class="control-label">Current Balance</label>
+  						<input type="text" class="form-control" id="current_balance" name="current_balance" value=<%=results[0].balance %> readonly />
+  					</div>
+            <div class="form-group label-floating">
+              <label class="control-label">Amount To Add</label>
+              <input type="text" class="form-control" id="amount" name="amount" />
+            </div>
+            <input type="hidden" class="form-control" id="id_isp" name="id_isp" value="<%=results[0].id_isp %>"/>
+  					<button type="submit" name="submit" class="btn btn-fill btn-success" value="submit">Submit</button>
+  					<a href="/isp" class="btn btn-fill btn-success">Back</a>
+  				</form>
+  			</div><!-- end of col-md-6 -->
+  		</div><!-- end of class row  -->
+  	</div>
+  </div>
+
+<% include  partials/footer %>
+
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+
+  	$("#form_admin").validate({
+
+  		submitHandler: function (form) {
+  			var reqData = $("#form_admin").serialize();
+
+  			$.ajax({
+  				type:"POST",
+  				contentType: "application/x-www-form-urlencoded",
+  				dataType:"json",
+  				data: reqData,
+  				url: "/payment/add_payment_now",
+
+  				success:function(response) {
+            // console.log(response);
+            var res = JSON.stringify(response);
+  					if(res.status === 'success') {
+  						showNotification(2, response.msg);
+  					} else {
+  						showNotification(3, response.msg);
+  					}
+  				},
+  				error: function (result) {
+  					showNotification(3,"Error " + JSON.stringify(result));
+  				}
+  			});
+  		}
+  	});
+  });
+
+  </script>

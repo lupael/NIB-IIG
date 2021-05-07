@@ -1,0 +1,110 @@
+  <% include  partials/header %>
+
+  <style media="screen">
+
+  </style>
+
+  <div class="row">
+  	<div class="col-sm-6 col-sm-offset-3">
+  		<div class="card">
+        <div class="card-header card-header-tabs" data-background-color="green">
+					<div class="nav-tabs-navigation">
+						<div class="nav-tabs-wrapper">
+							<span class="nav-tabs-title"><h1 class="card-title">Add User</h1></span>
+							<ul class="nav nav-tabs" data-tabs="tabs">
+
+							</ul>
+						</div>
+					</div>
+				</div>
+  			<div class="card-content">
+  				<div id="result"></div>
+  				<form method="post"  id="form_admin" enctype="multipart/form-data">
+  					<div class="form-group label-floating">
+  						<label class="control-label">Name</label>
+  						<input type="text" class="form-control" id="name" name="name" required>
+  					</div>
+            <div class="form-group label-floating">
+              <label class="control-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+
+            <div class="form-group label-floating">
+              <label class="control-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <div class="form-group label-floating">
+              <label class="control-label">Phone</label>
+              <input type="text" class="form-control" id="phone" name="phone" >
+            </div>
+
+
+            <div class="form-group label-floating">
+              <label class="control-label">Address</label>
+              <input type="text" class="form-control" id="address" name="address" >
+            </div>
+
+            <div class="form-group label-floating">
+              <label class="control-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required minlength="6">
+            </div>
+
+            <div class="form-group label-floating">
+              <label class="control-label">Re-Password</label>
+              <input type="password" class="form-control" id="repassword" name="repassword" required minlength="6" >
+            </div>
+
+  					<button type="submit" name="submit" class="btn btn-fill btn-success" value="submit">Submit</button>
+
+  					<a href="/user" class="btn btn-fill btn-success">Back</a>
+
+  				</form>
+  			</div><!-- end of col-md-6 -->
+  		</div><!-- end of class row  -->
+  	</div>
+  </div>
+
+<% include  partials/footer %>
+
+  <script type="text/javascript">
+
+  $('#phone').mask('ASY00000000', {'translation': {
+    A: {pattern: /[0]/},
+    S: {pattern: /[1]/},
+    Y: {pattern: /[5-9]/}
+  }
+});
+
+  $(document).ready(function(){
+
+    $("#form_admin").validate({
+
+      submitHandler: function (form) {
+        var reqData = $("#form_admin").serialize();
+
+        $.ajax({
+          type:"POST",
+          contentType: "application/x-www-form-urlencoded",
+          dataType:"json",
+          data: reqData,
+          url: "/user/add_user_now",
+
+          success:function(response) {
+            if(response.status === 'success') {
+              showNotification(2, response.msg);
+            }else if(response.status === 'warning') {
+              showNotification(3, response.msg);
+            }else if(response.status === 'error'){
+              showNotification(4, response.msg);
+            }
+          },
+          error: function (result) {
+            showNotification(3,"Error " + JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
+  </script>

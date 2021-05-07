@@ -1,0 +1,141 @@
+  <% include  partials/header %>
+
+  <style media="screen">
+  table.dataTable > thead > tr > th,
+  table.dataTable > tbody > tr > th,
+  table.dataTable > tfoot > tr > th,
+  table.dataTable > thead > tr > td,
+  table.dataTable > tbody > tr > td,
+  table.dataTable > tfoot > tr > td {
+    text-align:  center;
+  }
+  </style>
+
+  <div class="row">
+    <div class="col-md-12 ">
+      <div class="card">
+        <div class="card-header card-header-tabs" data-background-color="green">
+          <div class="nav-tabs-navigation">
+            <div class="nav-tabs-wrapper">
+              <span class="nav-tabs-title"><h1 class="card-title">User</h1></span>
+              <ul class="nav nav-tabs" data-tabs="tabs">
+                <li  style="float:right;" >
+                  <a class="btn btn-success btn-round" href="user/add_user_frm">
+                    <i class="material-icons">add</i>ADD&nbsp;
+                    <div class="ripple-container"></div></a>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="toolbar"></div>
+          <div class="material-datatables table-responsive">
+            <table id="data_grid" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>User Name</th>
+                  <th>Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% items.forEach((item) => { %>
+                  <tr>
+                    <td><%= item.name %></td>
+                    <td><%= item.username %></td>
+                    <td><%= item.email %></td>
+                    <td><%= item.id_iig_user %></td>
+                  </tr>
+                  <% }); %>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% include  partials/footer %>
+
+  <script type="text/javascript">
+    var oTable = "";
+    $(document).ready(function() {
+      oTable = $('#data_grid').DataTable({
+        // data:[],
+        columns: [
+          { "data": "name" },
+          { "data": "username" },
+          { "data": "email" },
+          { "data": "id_iig_user" }
+        ],
+        rowCallback: function (row, data) {
+          $('td:last', row).html('');
+          var tmp = $('<a id="edit_btn" class="btn btn-simple btn-warning btn-icon edit"><i class="material-icons">create</i></a>').attr({'id_iig_user': data.id_iig_user});
+          $('td:last', row).append(tmp);
+          var tmp = $('<a id="edit_btn" class="btn btn-simple btn-danger btn-icon delete_item"><i class="material-icons">close</i></a>').attr('id_iig_user', data.id_iig_user);
+          $('td:last', row).append(tmp);
+        },
+        drawCallback: function( settings ) {
+
+        },
+        filter: true,
+        info: true,
+        ordering: true,
+        processing: true,
+        retrieve: true
+      });
+
+      $("#data_grid").on('click', '.edit', function(){
+        var id_iig_user = $(this).attr('id_iig_user');
+        console.log("User edit clicked " + id_iig_user);
+        document.location.href="user/edit_user_frm/?id_iig_user=" + id_iig_user;
+      });
+
+      $("#data_grid").on('click', '.delete_item', function(){
+        var id_iig_user = $(this).attr('id_iig_user');
+        swal({
+          type:'warning',
+          title: 'Are you sure to Delete User?',
+          text: 'You will not be able to recover the data ',
+          showCancelButton: true,
+          confirmButtonColor: '#049F0C',
+          cancelButtonColor:'#ff0000',
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, keep it'
+        }).then(function (res) {
+          $.ajax({
+            type:"POST",
+            contentType: "application/x-www-form-urlencoded",
+            dataType:"json",
+            data:'id_iig_user=' + id_iig_user,
+            url: 'user/delete_user_now',
+
+            success:function(response) {
+              console.log("Response Status " + response.status);
+
+              if(response.status === 'success') {
+                refresh_datatable(response.data, 'success', response.msg);
+                showNotification(2,response.msg);
+              } else {
+                showNotification(4,response.msg);
+              }
+            }
+          });
+        });
+        console.log(' id_iig_user  = ' + id_iig_user );
+      });
+
+    });
+</script>

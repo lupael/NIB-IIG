@@ -1,0 +1,98 @@
+<% include  partials/header %>
+
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3">
+		<div class="card">
+			<div class="card-header card-header-tabs" data-background-color="green">
+				<div class="nav-tabs-navigation">
+					<div class="nav-tabs-wrapper">
+						<span class="nav-tabs-title"><h1 class="card-title">Edit Package</h1></span>
+						<ul class="nav nav-tabs" data-tabs="tabs">
+
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="card-content">
+				<div id="result"></div>
+				<form  method="post"  id="form_admin" enctype="multipart/form-data">
+
+					<input type="hidden" value="<%= IndivPackage[0].id_package %>" id="id_package" name="id_package" >
+
+					<div class="form-group label-floating">
+						<label class="control-label">Name</label>
+						<input type="text" class="form-control"  value="<%= IndivPackage[0].package_name %>" id="package_name" required name="package_name">
+					</div>
+
+					<div class="form-group label-floating">
+						<label class="control-label">Speed</label>
+						<input type="text" class="form-control"  value="<%= IndivPackage[0].package_speed %>" id="package_speed" required  name="package_speed">
+					</div>
+
+					<div class="form-group label-floating">
+						<label class="control-label">Price</label>
+						<input  type="number" step="any"  class="form-control"  value="<%= IndivPackage[0].package_price %>" id="package_price" required  name="package_price">
+					</div>
+
+					<div class="form-group label-floating">
+						<label class="control-label">User Type</label>
+						<select name="package_type" id='package_type' class="form-control">
+							<option disabled="" selected=""></option>
+							<% if(IndivPackage[0].package_type =='Prepaid'){ %>
+								<option selected="selected" value='Prepaid'>Prepaid</option>
+								<% } else { %>
+									<option  value='Prepaid'>Prepaid</option>
+									<% } %>
+
+									<% if(IndivPackage[0].package_type =='Postpaid'){ %>
+										<option selected="selected" value='Postpaid'>Postpaid</option>
+										<% } else { %>
+											<option  value='Postpaid'>Postpaid</option>
+											<% } %>
+										</select>
+									</div>
+
+									<button type="submit" name="submit" class="btn btn-success" value="submit">Submit</button>
+									<a href="/isp/package?id_isp=<%=IndivPackage[0].id_isp%>" class="btn btn-success" >Back</a>
+								</form>
+							</div><!-- end of class form_area -->
+						</div><!-- end of class container  -->
+					</div>
+				</div>
+
+<% include  partials/footer %>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	$("#form_admin").validate({
+
+		submitHandler: function (form) {
+			var reqData = $("#form_admin").serialize();
+			$.ajax({
+				type:"POST",
+				contentType: "application/x-www-form-urlencoded",
+				dataType:"json",
+				data: reqData,
+				url: "/isp/edit_package_now",
+
+				success:function(response) {
+					// console.log(response);
+					if(response.status === 'success') {
+						showNotification(2, response.msg);
+					} else if (response.status === 'warning') {
+						showNotification(3, response.msg);
+					}else if (response.status === 'failed') {
+						showNotification(4, response.msg);
+					}
+				},
+				error: function (result) {
+					showNotification(3,"Error " + JSON.stringify(result));
+				}
+			});
+		}
+	});
+});
+
+</script>

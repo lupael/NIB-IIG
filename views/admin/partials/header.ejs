@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<script>
+if(<%= id_iig_user %> == 1000000000){
+	document.location.href="/";
+}
+</script>
+<html class="perfect-scrollbar-off">
+<head>
+	<meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png" />
+  <link rel="icon" type="image/png" href="/img/favicon.png" />
+  <title>NIB IIG</title>
+
+  <!-- Bootstrap core CSS     -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <!--  Material Dashboard CSS    -->
+  <link href="/css/material-dashboard.css" rel="stylesheet" />
+  <!--  CSS for Demo Purpose, don't include it in your project     -->
+  <link href="/css/demo.css" rel="stylesheet" />
+  <!--     Date Picker      -->
+   <link rel="stylesheet" href="/js/flatpickr-master/dist/flatpickr.min.css" media="screen" title="no title" charset="utf-8">
+  <!--     Fonts and icons     -->
+  <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+  <!-- daterangepicker.css -->
+	<link href="/css/daterangepicker.css" rel="stylesheet" />
+  <!-- fakeLoader Css-->
+  <link rel="stylesheet" href="/css/fakeLoader.css">
+  <!-- fakeLoader Css-->
+  <link rel="stylesheet" href="/css/default-patch.css">
+
+</head>
+<!-- 3. Display the application -->
+<body>
+  <div  style="margin-top:-12px;" class="sidebar" data-active-color="white" data-background-color="green" data-image="/img/background3.jpg">
+
+    <div class="logo">
+      <div class="logo-normal">
+        <a style="margin-top:-6px;" href="/dashboard/" class="simple-text">
+          <p style="color:#ffffff; white-space: nowrap;  width: 170px; overflow: hidden; text-overflow: ellipsis;">NIB IIG</p>
+        </a>
+      </div>
+
+      <div class="logo-img">
+        <img style="height:25px; width:25px; margin-left:10px; margin-top:5px;" src="/img/logo.png"/>
+      </div>
+    </div>
+
+
+    <div class="sidebar-wrapper">
+      <div class="user">
+        <div class="photo">
+          <img src="/img/4.png" />
+        </div>
+        <div class="info">
+          <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+            <span>
+              Admin
+              <b class="caret"></b>
+            </span>
+          </a>
+          <div class="collapse" id="collapseExample">
+            <ul class="nav">
+              <li>
+                <a href="user/edit_users/1 ?>">
+                  <span class="sidebar-mini">EP</span>
+                  <span class="sidebar-normal">Edit Profile</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-container">
+        <ul class="nav">
+          <li>
+            <a data-tab="dashboard" href="/dashboard">
+              <i class="material-icons">dashboard</i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+
+          <li>
+            <a data-tab="user" href="/user">
+              <i class="material-icons">people</i>
+              <p>User</p>
+            </a>
+          </li>
+
+          <li>
+            <a data-tab="isp" href="/isp">
+              <i class="material-icons">domain</i>
+              <p>ISP</p>
+            </a>
+          </li>
+
+          <li>
+            <a data-tab="payment" href="/payment">
+              <i class="material-icons">attach_money</i>
+              <p>Payment</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="/login/logout">
+              <i class="material-icons">exit_to_app</i>
+              <p>Logout</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- End of .sidebar -->
+
+
+  <div class="wrapper">
+    <div class="main-panel">
+      <nav class="navbar navbar-transparent navbar-absolute">
+        <div class="container-fluid">
+          <div class="navbar-minimize">
+            <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon" >
+              <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+              <i class="material-icons visible-on-sidebar-mini">view_list</i>
+            </button>
+          </div>
+          <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" type="button">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href=""> <%= title %>  </a>
+          </div>
+
+          <div class="collapse navbar-collapse">
+
+          </div>
+        </div>
+      </nav>
+      <!-- End of top navigation bar  -->
+
+			<div class="main-content">
+
+        <!-- All the dynamic content will be here. -->
+  			<div class="container-fluid">
+
+          <script>
+            function refresh_datatable(data, msgType, msg) {
+              oTable.clear();
+              oTable.rows.add(data).draw();
+            }
+
+            function refresh_datatable_multiple(Table,data, msgType, msg) {
+              Table.clear();
+              Table.rows.add(data).draw();
+            }
+
+            function	showNotification(ind,msg){
+              type = ['','info','success','warning','danger','rose','primary'];
+
+              //color = Math.floor((Math.random() * 6) + 1);
+
+              $.notify({
+                icon: "notifications",
+                message: msg
+
+              },{
+                type: type[ind],
+                timer: 1000,
+                placement: {
+                  from: 'top',
+                  align: 'right'
+                }
+              });
+            }
+
+            function getNotification() {
+
+              $.ajax({
+                dataType: "json",
+                url: "<?=base_url()?>search/notifications",
+                success: function(data) {
+
+                  // At first clearing all previously loaded notifications.
+                  document.getElementById("notif").innerHTML = "";
+
+                  for(var i = 0; i < data.length ; i++)
+                  {
+                    document.getElementById("notif").innerHTML += "<li id='notiff'>"
+                    if(data[i].notification_type=="warning")
+                    {
+                      document.getElementById("notif").innerHTML += "<i class='material-icons'>warning</i>"
+                    }
+                    else if (data[i].notification_type=="error") {
+                      document.getElementById("notif").innerHTML += "<i class='material-icons'>close</i>"
+                    }
+                    else if (data[i].notification_type=="debug") {
+                      document.getElementById("notif").innerHTML += "  <i class='material-icons'>bug_report</i>"
+                    }
+                    else if (data[i].notification_type=="message") {
+                      document.getElementById("notif").innerHTML +="  <i class='material-icons'>comment</i>"
+                    }
+
+                    document.getElementById("notif").innerHTML += "<p id='noti_title'>"+data[i].notification_title +"</p>"
+                    document.getElementById("notif").innerHTML += "<p id='noti_body'>"+data[i].notification_body +"</p>"
+                    document.getElementById("notif").innerHTML += "<p id='noti_time'><em>"+data[i].notification_time +"</em></p>"
+                    document.getElementById("notif").innerHTML += "<li class='divider'></li>"
+
+
+                    document.getElementById("notif").innerHTML += "</li>"
+
+                  }
+
+                } // end success
+
+              }); // end ajax
+            }
+
+            function showProgressBar(){
+              swal({
+                imageUrl: "<?php echo base_url() ?>assets/img/pleasewaitloader.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+              });
+            }
+
+            function closeProgressBar(){
+              swal.close();
+            }
+
+            function showPageLoader() {
+              $("#fakeLoader").fakeLoader({
+                spinner:"spinner4",//Options: 'spinner1', 'spinner2', 'spinner3', 'spinner4', 'spinner5', 'spinner6', 'spinner7'
+                bgColor:"#EEEEEE"
+              });
+
+            }
+
+            function closePageLoader() {
+              $("#fakeLoader").hide();
+              $("#container").show();
+            }
+
+          </script>
